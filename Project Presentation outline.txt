@@ -1,0 +1,16 @@
+Presentation:
+Part A:
+Demo of the coffee shop application
+- How did I structure the application - How did I design the webpages
+- How did I test the application
+Part B:
+What is google firebase authentication
+Why do I choose to use Google firebase
+What kind of new feature did google firebase bring to my application
+Part C:
+Key concept of google firebase
+What are the advantages and disadvantages of google firebase
+Part D:
+Demo of the coffee shop application with google firebase - How did I structure the application
+- How did I design the webpages
+- How did I test the application
