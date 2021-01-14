@@ -1,0 +1,20 @@
+{
+  "name": "s1",
+  "version": "1.0.0",
+  "description": "This is a coffee shop project",
+  "main": "serverShop.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pucheng Tan",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "express": "^4.17.1",
+    "firebase": "^8.1.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

@@ -1,0 +1,33 @@
+body {
+    background-color: lightyellow;
+}
+
+table {
+    background-color: powderblue;
+}
+
+input {
+    padding: 5px;
+    border-radius: 5px;
+    outline: none;
+    width: 45px;
+}
+
+input:focus {
+    border-color: green;
+    width: 75px;
+    transition: 0.5s;
+}
+
+button{
+    padding: 5px;
+    border-radius: 5px;
+    outline: none;
+    width: 80px;
+}
+
+button:hover{
+    border-color: green;
+    width: 95px;
+    transition: 0.5s;
+}

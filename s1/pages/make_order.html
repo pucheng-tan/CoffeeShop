@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title> Menu Management</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+
+function makeOrder(){
+    var xmlhttp1 = new XMLHttpRequest();
+    var param = 'customerName='+document.getElementById("customerName").value
+    +'&'+"orderContent=";
+
+    var table = document.getElementById("menu-table"),
+          rows = table.getElementsByTagName("tr"),
+          i,
+          totalPrice = 0.0;
+       for (i = 1; i < rows.length; i++) {
+           if (parseInt(table.rows[i].getElementsByTagName("td")[5].innerHTML) != 0){
+               totalPrice += parseInt(table.rows[i].getElementsByTagName("td")[5].innerHTML) * parseFloat(table.rows[i].getElementsByTagName("td")[2].innerHTML)
+            param += table.rows[i].getElementsByTagName("td")[5].innerHTML + " ";
+           param += table.rows[i].getElementsByTagName("td")[1].innerHTML + ", ";
+           }
+
+           
+            };
+            param += "&" +"totalPrice="+totalPrice;
+
+    xmlhttp1.open("POST", "http://localhost/makeOrder", true);
+    xmlhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp1.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            document.getElementById("customerName").value = '';
+
+            refreshMenuTable();
+
+            alert("Success.");
+        }
+        if(this.status != 200){
+            alert("Failure.");
+        }
+    }
+
+    xmlhttp1.send(param);
+}
+
+function refreshMenuTable(){
+    xmlhttp3 = new XMLHttpRequest();
+    xmlhttp3.onreadystatechange = function() {
+    if(this.readyState == 4 && this.status == 200) {
+
+        myObj = JSON.parse(this.responseText);
+
+        document.getElementById("customerName").value = localStorage.getItem('customerName');
+
+        var table = "<table border='1' id='menu-table' >"
+            table += "<tr> <td> Drink ID </td> <td> Drink Name </td> <td> Drink Price </td> <td> </td> <td> </td> <td> Quantity </td> </tr>";
+            for(x in myObj) {
+                table += "<tr> <td> " + myObj[x].drinkID + "</td> <td>" + myObj[x].drinkName 
+                    + "</td> <td>" + myObj[x].drinkPrice + "</td> <td>" + "add" + "</td> <td>" 
+                        + "remove" + "</td> <td>" + 0 + "</td> </tr>";
+            }
+            table += "</table>"
+            document.getElementById("menu").innerHTML = table;
+
+            onAddClick("menu-table", function (row){
+            var value = parseInt(row.getElementsByTagName("td")[5].innerHTML);
+            row.getElementsByTagName("td")[5].innerHTML = value + 1;
+            });
+
+            onRemoveClick("menu-table", function (row){
+            var value = parseInt(row.getElementsByTagName("td")[5].innerHTML);
+            if (value != 0)
+                row.getElementsByTagName("td")[5].innerHTML = value - 1;
+            });
+        
+        
+    }
+};
+
+xmlhttp3.open("GET", "http://localhost/selectMenu", true);
+xmlhttp3.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp3.send();
+}
+
+function onAddClick(tableId, callback) {
+       var table = document.getElementById(tableId),
+          rows = table.getElementsByTagName("tr"),
+          i;
+       for (i = 0; i < rows.length; i++) {
+           table.rows[i].getElementsByTagName("td")[3].onclick = function (row) {
+              return function () {
+                 callback(row);
+              };
+           }(table.rows[i]);
+       }
+   };
+
+   function onRemoveClick(tableId, callback) {
+       var table = document.getElementById(tableId),
+          rows = table.getElementsByTagName("tr"),
+          i;
+       for (i = 0; i < rows.length; i++) {
+           table.rows[i].getElementsByTagName("td")[4].onclick = function (row) {
+              return function () {
+                 callback(row);
+              };
+           }(table.rows[i]);
+       }
+   };
+
+</script>
+
+<H1> Manage Menu</H1>
+
+<!-- The Menu Table -->
+
+<p id="menu"> </p> 
+
+<!-- The section to make a new order -->
+
+<h3> Make Order: </h3>
+
+<label for="customerName" >Customer Name:</label>
+<input type="text" id="customerName" name="customerName" placeholder="Michael">
+<br>
+<button onclick="makeOrder()"> Submit </button>
+
+<br>
+<br>
+<br>
+<button onclick="document.location='customer.html'">Main Page</button> <br>
+
+<script type="text/javascript">
+    refreshMenuTable();
+</script>
+
+
+</body>
+
+</html>

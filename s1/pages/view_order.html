@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title> View Order </title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+function cancelOrder(){
+    var xmlhttp1 = new XMLHttpRequest();
+    var param1 = 'orderID='+parseInt(document.getElementById("orderID").value);
+
+    xmlhttp1.open("POST", "http://localhost/cancelOrder", true);
+    xmlhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp1.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            document.getElementById("orderID").value = '';
+
+            viewOrderByName();
+
+            alert("Success.");
+        }
+        if(this.status != 200){
+            alert("Failure.");
+        }
+    }
+
+    xmlhttp1.send(param1);
+}
+
+function viewOrderByName(){
+    xmlhttp = new XMLHttpRequest();
+    var param = 'customerName='+document.getElementById("customerName").value;
+
+    xmlhttp.onreadystatechange = function() {
+    if(this.readyState == 4 && this.status == 200) {
+
+        myObj = JSON.parse(this.responseText);
+
+        var table = "<table border='1' id='order-table' >"
+            table += "<tr> <td> Order ID </td> <td> Customer Name </td> <td> Total Price </td> <td> Time </td> <td> State </td> <td> Order Content </td> </tr>";
+            for(x in myObj) {
+                table += "<tr> <td> " + myObj[x].orderID + "</td> <td>" + myObj[x].customerName 
+                    + "</td> <td>" + myObj[x].totalPrice + "</td> <td>" + myObj[x].orderTime + "</td> <td>" + myObj[x].orderState + "</td> <td>" + myObj[x].orderContent + "</td> </tr>";
+            }
+            table += "</table>"
+            document.getElementById("order").innerHTML = table;
+
+            // document.getElementById("customerName").value = '';
+
+    }
+};
+
+xmlhttp.open("POST", "http://localhost/selectOrderByName", true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(param);
+}
+
+</script>
+
+<H1> View Order</H1>
+
+<!-- The section to enter customer name -->
+
+<h3> View order by Customer Name: </h3>
+
+<label for="customerName" >Customer Name:</label>
+<input type="text" id="customerName" name="customerName" placeholder="Michael">
+<br>
+<button onclick="viewOrderByName()"> View </button>
+<br>
+
+<!-- The Order Table -->
+
+<p id="order"> </p> 
+<br>
+
+<!-- The section to cancel an order -->
+
+<h3> Cancel Order: </h3>
+
+<label for="orderID" >Order ID:</label>
+<input type="text" id="orderID" name="orderID" placeholder="1">
+<br>
+<button onclick="cancelOrder()"> cancel </button>
+<br>
+<br>
+<br>
+<button onclick="document.location='customer.html'">return to main page</button> <br>
+
+<script>
+    document.getElementById("customerName").value = localStorage.getItem('customerName');
+    if (localStorage.getItem('customerName') != "")
+        viewOrderByName()
+</script>
+
+</body>
+
+</html>

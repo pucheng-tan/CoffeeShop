@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<h1 id="welcome"> Welcome, Customer </h1>
+
+<button onclick="document.location='make_order.html'">View Menu</button> <br>
+
+<button onclick="document.location='view_order.html'">View Order</button> <br>
+
+<div class="container">
+    <input id="txtEmail" type="email" placeholder="Email"> <br>
+
+    <input id="txtPassword" type="password" placeholder="Password"> <br>
+
+    <button id="btnLogin" >Log In</button>
+
+    <button id="btnSignUp" >Sign Up</button>
+
+    <button id="btnLogout" style="display: none;">Log Out</button>
+
+    <input id="userName" type="text" placeholder="Michael" style="display: none;"> <br>
+
+    <button id="btnSetName" style="display: none;">Set Name</button>
+
+    
+
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-analytics.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-auth.js"></script>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
+

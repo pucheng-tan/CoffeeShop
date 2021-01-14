@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title> Order Management </title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+function setOrderReady(){
+    var xmlhttp1 = new XMLHttpRequest();
+    var param = 'orderID='+parseInt(document.getElementById("orderID").value);
+
+    xmlhttp1.open("POST", "http://localhost/setOrderReady", true);
+    xmlhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp1.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            document.getElementById("orderID").value = '';
+
+            refreshOrderTable();
+
+            alert("Success.");
+        }
+        if(this.status != 200){
+            alert("Failure.");
+        }
+    }
+
+    xmlhttp1.send(param);
+}
+
+function refreshOrderTable(){
+    xmlhttp2 = new XMLHttpRequest();
+    xmlhttp2.onreadystatechange = function() {
+    if(this.readyState == 4 && this.status == 200) {
+
+        myObj = JSON.parse(this.responseText);
+
+        var table = "<table border='1' id='order-table' >"
+            table += "<tr> <td> Order ID </td> <td> Customer Name </td> <td> Total Price </td> <td> Time </td> <td> State </td> <td> orderContent </td> </tr>";
+            for(x in myObj) {
+                table += "<tr> <td> " + myObj[x].orderID + "</td> <td>" + myObj[x].customerName 
+                    + "</td> <td>" + myObj[x].totalPrice + "</td> <td>" + myObj[x].orderTime + "</td> <td>" 
+                        + myObj[x].orderState + "</td> <td>" + myObj[x].orderContent + "</td> </tr>";
+            }
+            table += "</table>"
+            document.getElementById("order").innerHTML = table;
+
+            setTimeout("refreshOrderTable()", 200);
+
+    }
+};
+
+xmlhttp2.open("GET", "http://localhost/selectAllOrder", true);
+xmlhttp2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp2.send();
+}
+
+</script>
+
+<H1> Manage Order</H1>
+
+<!-- The Order Table -->
+
+<p id="order"> </p> 
+
+<!-- The section to set an order as ready -->
+
+<h3> Set an order as ready: </h3>
+
+<label for="orderID" >Order ID:</label>
+<input type="text" id="orderID" name="orderID" placeholder="1">
+<br>
+<button onclick="setOrderReady()"> Set </button>
+<br>
+<br>
+<br>
+<button onclick="document.location='client.html'">Management Page</button> <br>
+
+<script type="text/javascript">
+    refreshOrderTable();
+</script>
+
+</body>
+
+</html>

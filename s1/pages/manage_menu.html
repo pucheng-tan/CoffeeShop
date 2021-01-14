@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title> Menu Management</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+function addDrink(){
+    var xmlhttp1 = new XMLHttpRequest();
+    var param1 = 'drinkName='+document.getElementById("drinkName").value
+    +'&'+"drinkPrice="+parseFloat(document.getElementById("drinkPrice").value);
+
+    xmlhttp1.open("POST", "http://localhost/addDrink", true);
+    xmlhttp1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp1.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            document.getElementById("drinkName").value = '';
+            document.getElementById("drinkPrice").value = '';
+
+            refreshMenuTable();
+
+            alert("Success.");
+        }
+        if(this.status != 200){
+            alert("Failure.");
+        }
+    }
+
+    xmlhttp1.send(param1);
+}
+
+function deleteDrink(){
+    var xmlhttp2 = new XMLHttpRequest();
+    var param2 = 'drinkID='+parseInt(document.getElementById("drinkID").value);
+
+    xmlhttp2.open("POST", "http://localhost/deleteDrink", true);
+    xmlhttp2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp2.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            document.getElementById("drinkID").value = '';
+
+            refreshMenuTable();
+
+            alert("Success.");
+        }
+        if(this.status != 200){
+            alert("Failure.");
+        }
+    }
+
+    xmlhttp2.send(param2);
+}
+
+function refreshMenuTable(){
+    xmlhttp3 = new XMLHttpRequest();
+    xmlhttp3.onreadystatechange = function() {
+    if(this.readyState == 4 && this.status == 200) {
+
+        myObj = JSON.parse(this.responseText);
+
+        var table = "<table border='1' id='menu-table' >"
+            table += "<tr> <td> Drink ID </td> <td> Drink Name </td> <td> Drink Price </td> </tr>";
+            for(x in myObj) {
+                table += "<tr> <td> " + myObj[x].drinkID + "</td> <td>" + myObj[x].drinkName 
+                    + "</td> <td>" + myObj[x].drinkPrice + "</td> </tr>";
+            }
+            table += "</table>"
+            document.getElementById("menu").innerHTML = table;
+
+            setTimeout("refreshMenuTable()", 200);
+
+    }
+};
+
+xmlhttp3.open("GET", "http://localhost/selectMenu", true);
+xmlhttp3.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp3.send();
+}
+
+</script>
+
+<H1> Manage Menu</H1>
+
+<!-- The Menu Table -->
+
+<p id="menu"> </p> 
+
+<!-- The section to add a drink -->
+
+<h3> Add Drink: </h3>
+
+<label for="drinkName" >Drink Name:</label>
+<input type="text" id="drinkName" name="drinkName" placeholder="Mocha">
+<br>
+<label for="drinkPrice" >Drink Price:</label>
+<input type="text" id="drinkPrice" name="drinkPrice" placeholder="4.99">
+<br>
+<button onclick="addDrink()"> Add </button>
+
+<!-- The section to delete a drink -->
+
+<h3> Delete Drink: </h3>
+
+<label for="drinkID" >Drink ID:</label>
+<input type="text" id="drinkID" name="drinkID" placeholder="1">
+<br>
+<button onclick="deleteDrink()"> Delete </button>
+<br>
+<br>
+<br>
+<button onclick="document.location='client.html'">Management Page</button> <br>
+
+<script type="text/javascript">
+    refreshMenuTable();
+</script>
+
+</body>
+
+</html>
